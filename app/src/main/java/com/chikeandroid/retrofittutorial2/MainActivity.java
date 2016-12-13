@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     public void showResponse(String response) {
         if(mResponseTv.getVisibility() == View.GONE) {
             mResponseTv.setVisibility(View.VISIBLE);
-            mResponseTv.setText(response);
         }
+        mResponseTv.setText(response);
     }
 }
