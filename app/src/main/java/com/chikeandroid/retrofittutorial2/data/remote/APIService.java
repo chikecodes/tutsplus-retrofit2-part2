@@ -23,6 +23,13 @@ public interface APIService {
                         @Field("body") String body,
                         @Field("userId") long userId);
 
+    // RxJava
+   /* @POST("/posts")
+    @FormUrlEncoded
+    Observable<Post> savePost(@Field("title") String title,
+                              @Field("body") String body,
+                              @Field("userId") long userId);*/
+
     @POST("/posts")
     Call<Post> savePost(@Body Post post);
 

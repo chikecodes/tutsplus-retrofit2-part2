@@ -15,6 +15,8 @@ public class RetrofitClient {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
+                    // RxJava
+                    /*.addCallAdapterFactory(RxJavaCallAdapterFactory.create())*/
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

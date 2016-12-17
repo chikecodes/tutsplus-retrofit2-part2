@@ -104,5 +104,26 @@ public class Post {
                 '}';
     }
 
-    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        if (title != null ? !title.equals(post.title) : post.title != null) return false;
+        if (body != null ? !body.equals(post.body) : post.body != null) return false;
+        if (userId != null ? !userId.equals(post.userId) : post.userId != null) return false;
+        return id != null ? id.equals(post.id) : post.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (body != null ? body.hashCode() : 0);
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
+    }
 }

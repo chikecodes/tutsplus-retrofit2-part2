@@ -1,7 +1,7 @@
 package com.chikeandroid.retrofittutorial2;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +54,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendPost(String title, String body) {
+
+        // RxJava
+        /*mAPIService.savePost(title, body, 1).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Post>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Post post) {
+                        showResponse(post.toString());
+                    }
+                });
+*/
         mAPIService.savePost(title, body, 1).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -93,9 +113,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void cancelRequest() {
-        Call<Post> call = mAPIService.savePost("Foo", "Bar", 1);
-        call.enqueue(new Callback<Post>() {
+    private Call<Post> mCall;
+    public sendPost(String title, String body) {
+        mCall = mAPIService.savePost(title, body, 1);
+        mCall.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
 
@@ -117,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        call.cancel();
+    public void cancelRequest() {
+        mCall.cancel();
     }
 
     public void showResponse(String response) {
