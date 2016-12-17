@@ -113,7 +113,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Call<Post> mCall;
+   /*
+
+   Example of cancelling a request
+
+   private Call<Post> mCall;
     public sendPost(String title, String body) {
         mCall = mAPIService.savePost(title, body, 1);
         mCall.enqueue(new Callback<Post>() {
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void cancelRequest() {
         mCall.cancel();
-    }
+    }*/
 
     public void showResponse(String response) {
         if(mResponseTv.getVisibility() == View.GONE) {
