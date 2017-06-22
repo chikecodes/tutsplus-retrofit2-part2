@@ -14,6 +14,8 @@ import com.chikeandroid.retrofittutorial2.data.model.Post;
 import com.chikeandroid.retrofittutorial2.data.remote.APIService;
 import com.chikeandroid.retrofittutorial2.data.remote.ApiUtils;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView mResponseTv;
 
     private APIService mAPIService;
+
+    // RxJava
+    @NonNull
+    private CompositeDisposable mDisposables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         mResponseTv = (TextView) findViewById(R.id.tv_response);
 
         mAPIService = ApiUtils.getAPIService();
+
+        // RxJava
+        mDisposables = new CompositeDisposable();
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,25 +64,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendPost(String title, String body) {
 
-        // RxJava
-        /*mAPIService.savePost(title, body, 1).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Post>() {
+        /*// RxJava
+        mAPIService.savePost(title, body, 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Post>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Post post) {
+                    public void onNext(@NonNull Post post) {
                         showResponse(post.toString());
                     }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
-*/
+
+                // Make sure to dispose subscription in onDestroy()
+                */
+
         mAPIService.savePost(title, body, 1).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -153,5 +167,13 @@ public class MainActivity extends AppCompatActivity {
             mResponseTv.setVisibility(View.VISIBLE);
         }
         mResponseTv.setText(response);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // dispose to prevent memory leak
+        mDisposables.dispose();
     }
 }
